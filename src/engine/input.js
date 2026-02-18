@@ -1,34 +1,42 @@
-const normalizeKey = (key) => key.toLowerCase();
+const PREVENT_DEFAULT_CODES = new Set([
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "Space",
+]);
+
+const normalizeCode = (value) => value;
 
 export function createInput() {
   const pressed = new Set();
   const justPressed = new Set();
 
   function onKeyDown(event) {
-    const key = normalizeKey(event.key);
-    if (!pressed.has(key)) {
-      justPressed.add(key);
+    const code = normalizeCode(event.code);
+    if (!pressed.has(code)) {
+      justPressed.add(code);
     }
-    pressed.add(key);
+    pressed.add(code);
 
-    if (["arrowup", "arrowdown", "arrowleft", "arrowright", " ", "enter"].includes(key)) {
+    if (PREVENT_DEFAULT_CODES.has(code)) {
       event.preventDefault();
     }
   }
 
   function onKeyUp(event) {
-    pressed.delete(normalizeKey(event.key));
+    pressed.delete(normalizeCode(event.code));
   }
 
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
 
   return {
-    isDown(key) {
-      return pressed.has(normalizeKey(key));
+    isDown(code) {
+      return pressed.has(normalizeCode(code));
     },
-    wasPressed(key) {
-      return justPressed.has(normalizeKey(key));
+    wasPressed(code) {
+      return justPressed.has(normalizeCode(code));
     },
     endFrame() {
       justPressed.clear();
@@ -43,10 +51,10 @@ export function createInput() {
 }
 
 export function getMovementAxis(input) {
-  const left = input.isDown("a") || input.isDown("arrowleft");
-  const right = input.isDown("d") || input.isDown("arrowright");
-  const up = input.isDown("w") || input.isDown("arrowup");
-  const down = input.isDown("s") || input.isDown("arrowdown");
+  const left = input.isDown("KeyA") || input.isDown("ArrowLeft");
+  const right = input.isDown("KeyD") || input.isDown("ArrowRight");
+  const up = input.isDown("KeyW") || input.isDown("ArrowUp");
+  const down = input.isDown("KeyS") || input.isDown("ArrowDown");
 
   const x = (right ? 1 : 0) - (left ? 1 : 0);
   const y = (down ? 1 : 0) - (up ? 1 : 0);

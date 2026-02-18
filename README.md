@@ -11,8 +11,8 @@ No build tools or dependencies are required.
 
 ## Controls
 
-- **Move:** `WASD` or `Arrow keys`
-- **Door interaction:** `E` when standing adjacent to the door
+- **Move:** `WASD` (`KeyW/KeyA/KeyS/KeyD`, layout-independent) or `Arrow keys`
+- **Door interaction:** `E` (`KeyE`, layout-independent) when standing adjacent to the door
 - **Talk to NPC:** `Enter` or `Space` when adjacent
 - **Dialog next:** `Enter`, `Space`, or mouse click
 - **Dialog close:** `Esc`

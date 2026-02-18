@@ -52,11 +52,11 @@ function update(dt) {
     const canUseDoor = isAdjacentToTile(player, map.door);
     const canTalkNpc = isAdjacentToNpc(player, npc);
 
-    if (canUseDoor && input.wasPressed("e")) {
+    if (canUseDoor && input.wasPressed("KeyE")) {
       map.toggleDoor();
     }
 
-    if (canTalkNpc && (input.wasPressed("enter") || input.wasPressed(" "))) {
+    if (canTalkNpc && (input.wasPressed("Enter") || input.wasPressed("Space"))) {
       openDialog(dialog);
     }
 
@@ -66,9 +66,9 @@ function update(dt) {
         ? "Press E to toggle door"
         : "";
   } else {
-    if (input.wasPressed("escape")) {
+    if (input.wasPressed("Escape")) {
       closeDialog(dialog);
-    } else if (input.wasPressed("enter") || input.wasPressed(" ")) {
+    } else if (input.wasPressed("Enter") || input.wasPressed("Space")) {
       advanceDialog(dialog);
     }
   }
