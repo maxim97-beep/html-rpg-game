@@ -6,6 +6,8 @@ const palette = {
   wall: "#4f5f78",
   "door-closed": "#9c6e3f",
   "door-open": "#5f8f4e",
+  key: "#f2d14f",
+  exit: "#6ad7a8",
 };
 
 export function createRenderer(canvas, map) {
@@ -63,6 +65,24 @@ export function createRenderer(canvas, map) {
     ctx.fillText(text, x + 12, y + 24);
   }
 
+  function drawWinOverlay(state) {
+    if (!state.won) {
+      return;
+    }
+
+    ctx.fillStyle = "rgba(5, 10, 20, 0.78)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const text = "YOU WIN! Code: 7391";
+    ctx.font = "bold 48px sans-serif";
+    const textWidth = ctx.measureText(text).width;
+    const x = canvas.width / 2 - textWidth / 2;
+    const y = canvas.height / 2;
+
+    ctx.fillStyle = "#f9ffb5";
+    ctx.fillText(text, x, y);
+  }
+
   function drawDialog(dialog) {
     if (!dialog.active) {
       return;
@@ -96,8 +116,9 @@ export function createRenderer(canvas, map) {
       drawEntity(state.npc, "#e9c46a");
       drawEntity(state.player, "#58a6ff");
       drawDebug(state.debug);
-      drawHint(state.hint);
+      drawHint(state.message || state.hint);
       drawDialog(state.dialog);
+      drawWinOverlay(state);
     },
     onDialogClick(handler) {
       canvas.addEventListener("click", handler);
