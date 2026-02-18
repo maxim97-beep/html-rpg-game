@@ -1,6 +1,7 @@
 import { createInput, getMovementAxis } from "./engine/input.js";
 import { moveWithCollisions } from "./engine/collision.js";
 import { createRenderer } from "./engine/render.js";
+import { createAudio } from "./engine/audio.js";
 import { createMap, TILE_SIZE } from "./game/map.js";
 import {
   createPlayer,
@@ -26,6 +27,7 @@ const dialog = createDialogState([
 ]);
 
 const renderer = createRenderer(canvas, map);
+const audio = createAudio();
 renderer.onDialogClick(() => {
   if (dialog.active) {
     advanceDialog(dialog);
@@ -80,6 +82,7 @@ function update(dt) {
     if (input.wasPressed("KeyE")) {
       if (canTakeKey && map.pickUpKey()) {
         state.hasKey = true;
+        audio.playKeyPickup();
         state.message = "You got a key!";
         state.messageTimer = 2;
       } else if (canUseDoor) {
@@ -88,6 +91,7 @@ function update(dt) {
           state.messageTimer = 2;
         } else {
           map.toggleDoor();
+          audio.playDoorToggle();
         }
       }
     }
