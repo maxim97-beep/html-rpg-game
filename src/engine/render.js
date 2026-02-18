@@ -12,6 +12,18 @@ const palette = {
 
 export function createRenderer(canvas, map) {
   const ctx = canvas.getContext("2d");
+  const playerSprite = new Image();
+  let isPlayerSpriteLoaded = false;
+
+  playerSprite.addEventListener("load", () => {
+    isPlayerSpriteLoaded = true;
+  });
+
+  playerSprite.addEventListener("error", () => {
+    isPlayerSpriteLoaded = false;
+  });
+
+  playerSprite.src = "assets/player-sprite.svg";
 
   function clear() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -35,6 +47,15 @@ export function createRenderer(canvas, map) {
   function drawEntity(entity, color) {
     ctx.fillStyle = color;
     ctx.fillRect(entity.x, entity.y, entity.width, entity.height);
+  }
+
+  function drawPlayer(player) {
+    if (!isPlayerSpriteLoaded) {
+      drawEntity(player, "#58a6ff");
+      return;
+    }
+
+    ctx.drawImage(playerSprite, player.x, player.y, player.width, player.height);
   }
 
   function drawDebug(info) {
@@ -114,7 +135,7 @@ export function createRenderer(canvas, map) {
       clear();
       drawMap();
       drawEntity(state.npc, "#e9c46a");
-      drawEntity(state.player, "#58a6ff");
+      drawPlayer(state.player);
       drawDebug(state.debug);
       drawHint(state.message || state.hint);
       drawDialog(state.dialog);
