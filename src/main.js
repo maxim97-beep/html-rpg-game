@@ -19,6 +19,28 @@ const input = createInput();
 const map = createMap();
 const player = createPlayer();
 const npc = createNpc();
+const music = new Audio();
+music.loop = true;
+music.preload = "none";
+
+let hasStartedMusic = false;
+function startMusicOnFirstInteraction() {
+  if (hasStartedMusic) {
+    return;
+  }
+
+  hasStartedMusic = true;
+  music.src = "assets/audio/music.mp3";
+  const startPromise = music.play();
+  if (startPromise && typeof startPromise.catch === "function") {
+    startPromise.catch(() => {});
+  }
+}
+
+window.addEventListener("keydown", startMusicOnFirstInteraction, { once: true });
+window.addEventListener("click", startMusicOnFirstInteraction, { once: true });
+window.addEventListener("touchstart", startMusicOnFirstInteraction, { once: true });
+
 const dialog = createDialogState([
   "Welcome, traveler.",
   "The door responds to your intent: press E nearby.",
@@ -113,6 +135,8 @@ function update(dt) {
       state.messageTimer = 0;
       closeDialog(dialog);
       state.hint = "";
+      music.pause();
+      music.currentTime = 0;
     }
   } else {
     if (input.wasPressed("Escape")) {
